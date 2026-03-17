@@ -11,11 +11,20 @@ export default function Navbar() {
       <div style={{ fontSize: '1.3rem', fontWeight: '700', color: '#fff' }}>
         Swim<span style={{ color: '#00B4A0' }}>OS</span>
       </div>
-      <div style={{ display: 'flex', gap: '28px' }}>
+      <div style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
         <a href="/" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Home</a>
         <a href="/workouts" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Workouts</a>
         <a href="/drills" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Drills</a>
         <a href="/times" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>My Times</a>
+        <a href="/login" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Sign in</a>
+        <a href="/signup" style={{
+          background: '#00B4A0',
+          color: '#fff',
+          padding: '7px 16px',
+          borderRadius: '8px',
+          fontSize: '0.9rem',
+          fontWeight: '500',
+        }}>Sign up</a>
       </div>
     </nav>
   )
