@@ -3,28 +3,45 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 
+const ageGroups = ['10 & Under', '11-12', '13-14', '15-16', '17-18', '18+']
+
 export default function SignupPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('swimmer')
+  const [gender, setGender] = useState('M')
+  const [ageGroup, setAgeGroup] = useState('11-12')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
 
   async function handleSignup() {
     setLoading(true)
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { name, role }
+        data: { name, role, gender, age_group: ageGroup }
       }
     })
     if (error) {
       setMessage(error.message)
-    } else {
-      setMessage('Account created! You can now sign in.')
+      setLoading(false)
+      return
     }
+
+    // Save profile to profiles table
+    if (data.user) {
+      await supabase.from('profiles').insert({
+        id: data.user.id,
+        name,
+        gender,
+        age_group: ageGroup,
+        role,
+      })
+    }
+
+    setMessage('Account created! You can now sign in.')
     setLoading(false)
   }
 
@@ -57,14 +74,7 @@ export default function SignupPage() {
             placeholder="Jordan Smith"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px 14px',
-              border: '1px solid #E2E8F0',
-              borderRadius: '8px',
-              fontSize: '0.9rem',
-              outline: 'none',
-            }}
+            style={{ width: '100%', padding: '10px 14px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
           />
         </div>
 
@@ -75,14 +85,7 @@ export default function SignupPage() {
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px 14px',
-              border: '1px solid #E2E8F0',
-              borderRadius: '8px',
-              fontSize: '0.9rem',
-              outline: 'none',
-            }}
+            style={{ width: '100%', padding: '10px 14px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
           />
         </div>
 
@@ -91,18 +94,31 @@ export default function SignupPage() {
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px 14px',
-              border: '1px solid #E2E8F0',
-              borderRadius: '8px',
-              fontSize: '0.9rem',
-              outline: 'none',
-              background: '#fff',
-            }}>
+            style={{ width: '100%', padding: '10px 14px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', background: '#fff' }}>
             <option value="swimmer">Swimmer</option>
             <option value="coach">Coach</option>
             <option value="triathlete">Triathlete</option>
+          </select>
+        </div>
+
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', marginBottom: '6px' }}>Gender</label>
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            style={{ width: '100%', padding: '10px 14px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', background: '#fff' }}>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+          </select>
+        </div>
+
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', marginBottom: '6px' }}>Age group</label>
+          <select
+            value={ageGroup}
+            onChange={(e) => setAgeGroup(e.target.value)}
+            style={{ width: '100%', padding: '10px 14px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', background: '#fff' }}>
+            {ageGroups.map((ag) => <option key={ag} value={ag}>{ag}</option>)}
           </select>
         </div>
 
@@ -113,14 +129,7 @@ export default function SignupPage() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px 14px',
-              border: '1px solid #E2E8F0',
-              borderRadius: '8px',
-              fontSize: '0.9rem',
-              outline: 'none',
-            }}
+            style={{ width: '100%', padding: '10px 14px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
           />
         </div>
 
