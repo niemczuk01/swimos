@@ -1,5 +1,4 @@
 export type Standard = 'B' | 'BB' | 'A' | 'AA' | 'AAA' | 'AAAA'
-
 export type CourseType = 'SCY' | 'SCM' | 'LCM'
 
 export interface StandardTime {
@@ -16,7 +15,6 @@ export interface EventStandards {
   standards: StandardTime[]
 }
 
-// Helper to convert time string to seconds
 export function timeToSeconds(time: string): number {
   if (time.includes(':')) {
     const [mins, secs] = time.split(':')
@@ -25,7 +23,6 @@ export function timeToSeconds(time: string): number {
   return parseFloat(time)
 }
 
-// Helper to get standard achieved for a given time
 export function getStandardAchieved(
   timeStr: string,
   event: string,
@@ -38,121 +35,116 @@ export function getStandardAchieved(
     (s) => s.event === event && s.course === course && s.gender === gender && s.ageGroup === ageGroup
   )
   if (!eventStandards) return null
-
   const standardOrder: Standard[] = ['B', 'BB', 'A', 'AA', 'AAA', 'AAAA']
-
-  // Find the highest standard where the swim time is faster (lower) than the cut
   let highest: Standard | null = null
   for (const s of eventStandards.standards) {
     if (swimSeconds <= s.seconds) {
       const currentIndex = standardOrder.indexOf(s.standard)
       const highestIndex = highest ? standardOrder.indexOf(highest) : -1
-      if (currentIndex > highestIndex) {
-        highest = s.standard
-      }
+      if (currentIndex > highestIndex) highest = s.standard
     }
   }
-
   return highest
 }
-// PVS Standards — SCY 11-12 Boys
+
 export const pvsStandards: EventStandards[] = [
-  {
-    event: '50m Freestyle',
-    course: 'SCY',
-    gender: 'M',
-    ageGroup: '11-12',
-    standards: [
-      { standard: 'B',    time: '31.09', seconds: 31.09 },
-      { standard: 'BB',   time: '28.99', seconds: 28.99 },
-      { standard: 'A',    time: '27.39', seconds: 27.39 },
-      { standard: 'AA',   time: '25.79', seconds: 25.79 },
-      { standard: 'AAA',  time: '24.59', seconds: 24.59 },
-      { standard: 'AAAA', time: '23.49', seconds: 23.49 },
-    ]
-  },
-  {
-    event: '100m Freestyle',
-    course: 'SCY',
-    gender: 'M',
-    ageGroup: '11-12',
-    standards: [
-      { standard: 'B',    time: '1:08.09', seconds: 68.09 },
-      { standard: 'BB',   time: '1:03.49', seconds: 63.49 },
-      { standard: 'A',    time: '59.89',   seconds: 59.89 },
-      { standard: 'AA',   time: '56.39',   seconds: 56.39 },
-      { standard: 'AAA',  time: '53.79',   seconds: 53.79 },
-      { standard: 'AAAA', time: '51.39',   seconds: 51.39 },
-    ]
-  },
-  {
-    event: '200m Freestyle',
-    course: 'SCY',
-    gender: 'M',
-    ageGroup: '11-12',
-    standards: [
-      { standard: 'B',    time: '2:28.09', seconds: 148.09 },
-      { standard: 'BB',   time: '2:18.49', seconds: 138.49 },
-      { standard: 'A',    time: '2:10.79', seconds: 130.79 },
-      { standard: 'AA',   time: '2:03.09', seconds: 123.09 },
-      { standard: 'AAA',  time: '1:57.49', seconds: 117.49 },
-      { standard: 'AAAA', time: '1:52.29', seconds: 112.29 },
-    ]
-  },
-  {
-    event: '100m Backstroke',
-    course: 'SCY',
-    gender: 'M',
-    ageGroup: '11-12',
-    standards: [
-      { standard: 'B',    time: '1:17.09', seconds: 77.09 },
-      { standard: 'BB',   time: '1:11.79', seconds: 71.79 },
-      { standard: 'A',    time: '1:07.69', seconds: 67.69 },
-      { standard: 'AA',   time: '1:03.59', seconds: 63.59 },
-      { standard: 'AAA',  time: '1:00.49', seconds: 60.49 },
-      { standard: 'AAAA', time: '57.79',   seconds: 57.79 },
-    ]
-  },
-  {
-    event: '100m Breaststroke',
-    course: 'SCY',
-    gender: 'M',
-    ageGroup: '11-12',
-    standards: [
-      { standard: 'B',    time: '1:24.09', seconds: 84.09 },
-      { standard: 'BB',   time: '1:17.99', seconds: 77.99 },
-      { standard: 'A',    time: '1:13.49', seconds: 73.49 },
-      { standard: 'AA',   time: '1:08.99', seconds: 68.99 },
-      { standard: 'AAA',  time: '1:05.69', seconds: 65.69 },
-      { standard: 'AAAA', time: '1:02.79', seconds: 62.79 },
-    ]
-  },
-  {
-    event: '100m Butterfly',
-    course: 'SCY',
-    gender: 'M',
-    ageGroup: '11-12',
-    standards: [
-      { standard: 'B',    time: '1:17.09', seconds: 77.09 },
-      { standard: 'BB',   time: '1:11.09', seconds: 71.09 },
-      { standard: 'A',    time: '1:06.79', seconds: 66.79 },
-      { standard: 'AA',   time: '1:02.49', seconds: 62.49 },
-      { standard: 'AAA',  time: '59.49',   seconds: 59.49 },
-      { standard: 'AAAA', time: '56.79',   seconds: 56.79 },
-    ]
-  },
-  {
-    event: '200m IM',
-    course: 'SCY',
-    gender: 'M',
-    ageGroup: '11-12',
-    standards: [
-      { standard: 'B',    time: '2:48.09', seconds: 168.09 },
-      { standard: 'BB',   time: '2:36.99', seconds: 156.99 },
-      { standard: 'A',    time: '2:28.49', seconds: 148.49 },
-      { standard: 'AA',   time: '2:19.99', seconds: 139.99 },
-      { standard: 'AAA',  time: '2:13.29', seconds: 133.29 },
-      { standard: 'AAAA', time: '2:07.29', seconds: 127.29 },
-    ]
-  },
+  // ─── 10 & Under Boys SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'M', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '38.19', seconds: 38.19 }, { standard: 'BB', time: '34.59', seconds: 34.59 }, { standard: 'A', time: '31.09', seconds: 31.09 }, { standard: 'AA', time: '29.89', seconds: 29.89 }, { standard: 'AAA', time: '28.69', seconds: 28.69 }, { standard: 'AAAA', time: '27.49', seconds: 27.49 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:27.99', seconds: 87.99 }, { standard: 'BB', time: '1:18.89', seconds: 78.89 }, { standard: 'A', time: '1:09.79', seconds: 69.79 }, { standard: 'AA', time: '1:06.79', seconds: 66.79 }, { standard: 'AAA', time: '1:03.79', seconds: 63.79 }, { standard: 'AAAA', time: '1:00.69', seconds: 60.69 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '3:09.49', seconds: 189.49 }, { standard: 'BB', time: '2:50.59', seconds: 170.59 }, { standard: 'A', time: '2:31.59', seconds: 151.59 }, { standard: 'AA', time: '2:25.29', seconds: 145.29 }, { standard: 'AAA', time: '2:18.99', seconds: 138.99 }, { standard: 'AAAA', time: '2:12.69', seconds: 132.69 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'M', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:40.69', seconds: 100.69 }, { standard: 'BB', time: '1:30.09', seconds: 90.09 }, { standard: 'A', time: '1:19.59', seconds: 79.59 }, { standard: 'AA', time: '1:16.09', seconds: 76.09 }, { standard: 'AAA', time: '1:12.49', seconds: 72.49 }, { standard: 'AAAA', time: '1:08.99', seconds: 68.99 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'M', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:54.09', seconds: 114.09 }, { standard: 'BB', time: '1:42.29', seconds: 102.29 }, { standard: 'A', time: '1:30.59', seconds: 90.59 }, { standard: 'AA', time: '1:26.59', seconds: 86.59 }, { standard: 'AAA', time: '1:22.69', seconds: 82.69 }, { standard: 'AAAA', time: '1:18.79', seconds: 78.79 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'M', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:53.49', seconds: 113.49 }, { standard: 'BB', time: '1:38.99', seconds: 98.99 }, { standard: 'A', time: '1:24.39', seconds: 84.39 }, { standard: 'AA', time: '1:19.49', seconds: 79.49 }, { standard: 'AAA', time: '1:14.59', seconds: 74.59 }, { standard: 'AAAA', time: '1:09.79', seconds: 69.79 }] },
+  { event: '100m IM',           course: 'SCY', gender: 'M', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:39.69', seconds: 99.69 }, { standard: 'BB', time: '1:29.69', seconds: 89.69 }, { standard: 'A', time: '1:19.69', seconds: 79.69 }, { standard: 'AA', time: '1:16.39', seconds: 76.39 }, { standard: 'AAA', time: '1:13.09', seconds: 73.09 }, { standard: 'AAAA', time: '1:09.79', seconds: 69.79 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'M', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '3:38.59', seconds: 218.59 }, { standard: 'BB', time: '3:15.99', seconds: 195.99 }, { standard: 'A', time: '2:53.49', seconds: 173.49 }, { standard: 'AA', time: '2:45.89', seconds: 165.89 }, { standard: 'AAA', time: '2:38.39', seconds: 158.39 }, { standard: 'AAAA', time: '2:30.89', seconds: 150.89 }] },
+
+  // ─── 10 & Under Girls SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'F', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '39.79', seconds: 39.79 }, { standard: 'BB', time: '35.99', seconds: 35.99 }, { standard: 'A', time: '32.09', seconds: 32.09 }, { standard: 'AA', time: '30.89', seconds: 30.89 }, { standard: 'AAA', time: '29.59', seconds: 29.59 }, { standard: 'AAAA', time: '28.29', seconds: 28.29 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:30.79', seconds: 90.79 }, { standard: 'BB', time: '1:21.09', seconds: 81.09 }, { standard: 'A', time: '1:11.49', seconds: 71.49 }, { standard: 'AA', time: '1:08.29', seconds: 68.29 }, { standard: 'AAA', time: '1:04.99', seconds: 64.99 }, { standard: 'AAAA', time: '1:01.79', seconds: 61.79 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '3:22.79', seconds: 202.79 }, { standard: 'BB', time: '3:00.59', seconds: 180.59 }, { standard: 'A', time: '2:38.39', seconds: 158.39 }, { standard: 'AA', time: '2:30.99', seconds: 150.99 }, { standard: 'AAA', time: '2:23.59', seconds: 143.59 }, { standard: 'AAAA', time: '2:16.19', seconds: 136.19 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'F', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:45.79', seconds: 105.79 }, { standard: 'BB', time: '1:33.99', seconds: 93.99 }, { standard: 'A', time: '1:22.29', seconds: 82.29 }, { standard: 'AA', time: '1:18.39', seconds: 78.39 }, { standard: 'AAA', time: '1:14.49', seconds: 74.49 }, { standard: 'AAAA', time: '1:10.59', seconds: 70.59 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'F', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '2:00.29', seconds: 120.29 }, { standard: 'BB', time: '1:46.89', seconds: 106.89 }, { standard: 'A', time: '1:33.59', seconds: 93.59 }, { standard: 'AA', time: '1:29.09', seconds: 89.09 }, { standard: 'AAA', time: '1:24.69', seconds: 84.69 }, { standard: 'AAAA', time: '1:20.19', seconds: 80.19 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'F', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:56.69', seconds: 116.69 }, { standard: 'BB', time: '1:41.39', seconds: 101.39 }, { standard: 'A', time: '1:26.09', seconds: 86.09 }, { standard: 'AA', time: '1:20.99', seconds: 80.99 }, { standard: 'AAA', time: '1:15.99', seconds: 75.99 }, { standard: 'AAAA', time: '1:10.89', seconds: 70.89 }] },
+  { event: '100m IM',           course: 'SCY', gender: 'F', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '1:44.29', seconds: 104.29 }, { standard: 'BB', time: '1:33.19', seconds: 93.19 }, { standard: 'A', time: '1:22.09', seconds: 82.09 }, { standard: 'AA', time: '1:18.39', seconds: 78.39 }, { standard: 'AAA', time: '1:14.69', seconds: 74.69 }, { standard: 'AAAA', time: '1:10.99', seconds: 70.99 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'F', ageGroup: '10 & Under', standards: [{ standard: 'B', time: '3:42.09', seconds: 222.09 }, { standard: 'BB', time: '3:18.79', seconds: 198.79 }, { standard: 'A', time: '2:55.49', seconds: 175.49 }, { standard: 'AA', time: '2:47.69', seconds: 167.69 }, { standard: 'AAA', time: '2:39.99', seconds: 159.99 }, { standard: 'AAAA', time: '2:32.19', seconds: 152.19 }] },
+
+  // ─── 11-12 Boys SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'M', ageGroup: '11-12', standards: [{ standard: 'B', time: '32.79', seconds: 32.79 }, { standard: 'BB', time: '30.49', seconds: 30.49 }, { standard: 'A', time: '28.09', seconds: 28.09 }, { standard: 'AA', time: '26.99', seconds: 26.99 }, { standard: 'AAA', time: '25.79', seconds: 25.79 }, { standard: 'AAAA', time: '24.59', seconds: 24.59 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '11-12', standards: [{ standard: 'B', time: '1:11.49', seconds: 71.49 }, { standard: 'BB', time: '1:06.39', seconds: 66.39 }, { standard: 'A', time: '1:01.29', seconds: 61.29 }, { standard: 'AA', time: '58.69', seconds: 58.69 }, { standard: 'AAA', time: '56.19', seconds: 56.19 }, { standard: 'AAAA', time: '53.59', seconds: 53.59 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '11-12', standards: [{ standard: 'B', time: '2:35.99', seconds: 155.99 }, { standard: 'BB', time: '2:24.89', seconds: 144.89 }, { standard: 'A', time: '2:13.69', seconds: 133.69 }, { standard: 'AA', time: '2:08.19', seconds: 128.19 }, { standard: 'AAA', time: '2:02.59', seconds: 122.59 }, { standard: 'AAAA', time: '1:56.99', seconds: 116.99 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'M', ageGroup: '11-12', standards: [{ standard: 'B', time: '1:22.19', seconds: 82.19 }, { standard: 'BB', time: '1:15.69', seconds: 75.69 }, { standard: 'A', time: '1:09.29', seconds: 69.29 }, { standard: 'AA', time: '1:05.99', seconds: 65.99 }, { standard: 'AAA', time: '1:02.79', seconds: 62.79 }, { standard: 'AAAA', time: '59.49', seconds: 59.49 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'M', ageGroup: '11-12', standards: [{ standard: 'B', time: '1:32.59', seconds: 92.59 }, { standard: 'BB', time: '1:25.49', seconds: 85.49 }, { standard: 'A', time: '1:18.39', seconds: 78.39 }, { standard: 'AA', time: '1:14.89', seconds: 74.89 }, { standard: 'AAA', time: '1:11.39', seconds: 71.39 }, { standard: 'AAAA', time: '1:07.79', seconds: 67.79 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'M', ageGroup: '11-12', standards: [{ standard: 'B', time: '1:22.89', seconds: 82.89 }, { standard: 'BB', time: '1:16.09', seconds: 76.09 }, { standard: 'A', time: '1:09.29', seconds: 69.29 }, { standard: 'AA', time: '1:05.89', seconds: 65.89 }, { standard: 'AAA', time: '1:02.49', seconds: 62.49 }, { standard: 'AAAA', time: '59.09', seconds: 59.09 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'M', ageGroup: '11-12', standards: [{ standard: 'B', time: '2:59.29', seconds: 179.29 }, { standard: 'BB', time: '2:45.79', seconds: 165.79 }, { standard: 'A', time: '2:32.29', seconds: 152.29 }, { standard: 'AA', time: '2:25.59', seconds: 145.59 }, { standard: 'AAA', time: '2:18.79', seconds: 138.79 }, { standard: 'AAAA', time: '2:12.09', seconds: 132.09 }] },
+  { event: '400m IM',           course: 'SCY', gender: 'M', ageGroup: '11-12', standards: [{ standard: 'B', time: '6:17.09', seconds: 377.09 }, { standard: 'BB', time: '5:50.09', seconds: 350.09 }, { standard: 'A', time: '5:23.19', seconds: 323.19 }, { standard: 'AA', time: '5:09.79', seconds: 309.79 }, { standard: 'AAA', time: '4:56.29', seconds: 296.29 }, { standard: 'AAAA', time: '4:42.79', seconds: 282.79 }] },
+
+  // ─── 11-12 Girls SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'F', ageGroup: '11-12', standards: [{ standard: 'B', time: '33.99', seconds: 33.99 }, { standard: 'BB', time: '31.69', seconds: 31.69 }, { standard: 'A', time: '29.29', seconds: 29.29 }, { standard: 'AA', time: '28.09', seconds: 28.09 }, { standard: 'AAA', time: '26.99', seconds: 26.99 }, { standard: 'AAAA', time: '25.79', seconds: 25.79 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '11-12', standards: [{ standard: 'B', time: '1:14.69', seconds: 74.69 }, { standard: 'BB', time: '1:09.39', seconds: 69.39 }, { standard: 'A', time: '1:03.99', seconds: 63.99 }, { standard: 'AA', time: '1:01.39', seconds: 61.39 }, { standard: 'AAA', time: '58.69', seconds: 58.69 }, { standard: 'AAAA', time: '55.99', seconds: 55.99 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '11-12', standards: [{ standard: 'B', time: '2:42.59', seconds: 162.59 }, { standard: 'BB', time: '2:30.89', seconds: 150.89 }, { standard: 'A', time: '2:19.29', seconds: 139.29 }, { standard: 'AA', time: '2:13.49', seconds: 133.49 }, { standard: 'AAA', time: '2:07.69', seconds: 127.69 }, { standard: 'AAAA', time: '2:01.89', seconds: 121.89 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'F', ageGroup: '11-12', standards: [{ standard: 'B', time: '1:26.59', seconds: 86.59 }, { standard: 'BB', time: '1:19.79', seconds: 79.79 }, { standard: 'A', time: '1:12.99', seconds: 72.99 }, { standard: 'AA', time: '1:09.59', seconds: 69.59 }, { standard: 'AAA', time: '1:06.19', seconds: 66.19 }, { standard: 'AAAA', time: '1:02.69', seconds: 62.69 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'F', ageGroup: '11-12', standards: [{ standard: 'B', time: '1:36.49', seconds: 96.49 }, { standard: 'BB', time: '1:29.29', seconds: 89.29 }, { standard: 'A', time: '1:22.19', seconds: 82.19 }, { standard: 'AA', time: '1:18.59', seconds: 78.59 }, { standard: 'AAA', time: '1:15.09', seconds: 75.09 }, { standard: 'AAAA', time: '1:11.49', seconds: 71.49 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'F', ageGroup: '11-12', standards: [{ standard: 'B', time: '1:25.79', seconds: 85.79 }, { standard: 'BB', time: '1:18.89', seconds: 78.89 }, { standard: 'A', time: '1:12.09', seconds: 72.09 }, { standard: 'AA', time: '1:08.59', seconds: 68.59 }, { standard: 'AAA', time: '1:05.19', seconds: 65.19 }, { standard: 'AAAA', time: '1:01.79', seconds: 61.79 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'F', ageGroup: '11-12', standards: [{ standard: 'B', time: '3:03.89', seconds: 183.89 }, { standard: 'BB', time: '2:50.69', seconds: 170.69 }, { standard: 'A', time: '2:37.59', seconds: 157.59 }, { standard: 'AA', time: '2:30.99', seconds: 150.99 }, { standard: 'AAA', time: '2:24.49', seconds: 144.49 }, { standard: 'AAAA', time: '2:17.89', seconds: 137.89 }] },
+  { event: '400m IM',           course: 'SCY', gender: 'F', ageGroup: '11-12', standards: [{ standard: 'B', time: '6:31.69', seconds: 391.69 }, { standard: 'BB', time: '6:03.69', seconds: 363.69 }, { standard: 'A', time: '5:35.79', seconds: 335.79 }, { standard: 'AA', time: '5:21.79', seconds: 321.79 }, { standard: 'AAA', time: '5:07.79', seconds: 307.79 }, { standard: 'AAAA', time: '4:53.79', seconds: 293.79 }] },
+
+  // ─── 13-14 Boys SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'M', ageGroup: '13-14', standards: [{ standard: 'B', time: '29.89', seconds: 29.89 }, { standard: 'BB', time: '27.69', seconds: 27.69 }, { standard: 'A', time: '25.59', seconds: 25.59 }, { standard: 'AA', time: '24.59', seconds: 24.59 }, { standard: 'AAA', time: '23.49', seconds: 23.49 }, { standard: 'AAAA', time: '22.39', seconds: 22.39 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '13-14', standards: [{ standard: 'B', time: '1:04.99', seconds: 64.99 }, { standard: 'BB', time: '1:00.29', seconds: 60.29 }, { standard: 'A', time: '55.69', seconds: 55.69 }, { standard: 'AA', time: '53.39', seconds: 53.39 }, { standard: 'AAA', time: '51.09', seconds: 51.09 }, { standard: 'AAAA', time: '48.69', seconds: 48.69 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '13-14', standards: [{ standard: 'B', time: '2:22.49', seconds: 142.49 }, { standard: 'BB', time: '2:12.29', seconds: 132.29 }, { standard: 'A', time: '2:02.19', seconds: 122.19 }, { standard: 'AA', time: '1:57.09', seconds: 117.09 }, { standard: 'AAA', time: '1:51.99', seconds: 111.99 }, { standard: 'AAAA', time: '1:46.89', seconds: 106.89 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'M', ageGroup: '13-14', standards: [{ standard: 'B', time: '1:11.29', seconds: 71.29 }, { standard: 'BB', time: '1:06.19', seconds: 66.19 }, { standard: 'A', time: '1:01.09', seconds: 61.09 }, { standard: 'AA', time: '58.59', seconds: 58.59 }, { standard: 'AAA', time: '55.99', seconds: 55.99 }, { standard: 'AAAA', time: '53.49', seconds: 53.49 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'M', ageGroup: '13-14', standards: [{ standard: 'B', time: '1:20.49', seconds: 80.49 }, { standard: 'BB', time: '1:14.79', seconds: 74.79 }, { standard: 'A', time: '1:08.99', seconds: 68.99 }, { standard: 'AA', time: '1:06.19', seconds: 66.19 }, { standard: 'AAA', time: '1:03.29', seconds: 63.29 }, { standard: 'AAAA', time: '1:00.39', seconds: 60.39 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'M', ageGroup: '13-14', standards: [{ standard: 'B', time: '1:10.49', seconds: 70.49 }, { standard: 'BB', time: '1:05.49', seconds: 65.49 }, { standard: 'A', time: '1:00.39', seconds: 60.39 }, { standard: 'AA', time: '57.89', seconds: 57.89 }, { standard: 'AAA', time: '55.39', seconds: 55.39 }, { standard: 'AAAA', time: '52.89', seconds: 52.89 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'M', ageGroup: '13-14', standards: [{ standard: 'B', time: '2:37.99', seconds: 157.99 }, { standard: 'BB', time: '2:26.69', seconds: 146.69 }, { standard: 'A', time: '2:15.39', seconds: 135.39 }, { standard: 'AA', time: '2:09.79', seconds: 129.79 }, { standard: 'AAA', time: '2:04.09', seconds: 124.09 }, { standard: 'AAAA', time: '1:58.49', seconds: 118.49 }] },
+  { event: '400m IM',           course: 'SCY', gender: 'M', ageGroup: '13-14', standards: [{ standard: 'B', time: '5:37.69', seconds: 337.69 }, { standard: 'BB', time: '5:13.59', seconds: 313.59 }, { standard: 'A', time: '4:49.49', seconds: 289.49 }, { standard: 'AA', time: '4:37.39', seconds: 277.39 }, { standard: 'AAA', time: '4:25.39', seconds: 265.39 }, { standard: 'AAAA', time: '4:13.29', seconds: 253.29 }] },
+
+  // ─── 13-14 Girls SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'F', ageGroup: '13-14', standards: [{ standard: 'B', time: '32.49', seconds: 32.49 }, { standard: 'BB', time: '30.19', seconds: 30.19 }, { standard: 'A', time: '27.89', seconds: 27.89 }, { standard: 'AA', time: '26.69', seconds: 26.69 }, { standard: 'AAA', time: '25.59', seconds: 25.59 }, { standard: 'AAAA', time: '24.39', seconds: 24.39 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '13-14', standards: [{ standard: 'B', time: '1:10.99', seconds: 70.99 }, { standard: 'BB', time: '1:05.89', seconds: 65.89 }, { standard: 'A', time: '1:00.89', seconds: 60.89 }, { standard: 'AA', time: '58.29', seconds: 58.29 }, { standard: 'AAA', time: '55.79', seconds: 55.79 }, { standard: 'AAAA', time: '53.29', seconds: 53.29 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '13-14', standards: [{ standard: 'B', time: '2:33.59', seconds: 153.59 }, { standard: 'BB', time: '2:22.69', seconds: 142.69 }, { standard: 'A', time: '2:11.69', seconds: 131.69 }, { standard: 'AA', time: '2:06.19', seconds: 126.19 }, { standard: 'AAA', time: '2:00.69', seconds: 120.69 }, { standard: 'AAAA', time: '1:55.29', seconds: 115.29 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'F', ageGroup: '13-14', standards: [{ standard: 'B', time: '1:16.89', seconds: 76.89 }, { standard: 'BB', time: '1:11.39', seconds: 71.39 }, { standard: 'A', time: '1:05.89', seconds: 65.89 }, { standard: 'AA', time: '1:03.19', seconds: 63.19 }, { standard: 'AAA', time: '1:00.49', seconds: 60.49 }, { standard: 'AAAA', time: '57.69', seconds: 57.69 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'F', ageGroup: '13-14', standards: [{ standard: 'B', time: '1:28.69', seconds: 88.69 }, { standard: 'BB', time: '1:22.29', seconds: 82.29 }, { standard: 'A', time: '1:15.99', seconds: 75.99 }, { standard: 'AA', time: '1:12.89', seconds: 72.89 }, { standard: 'AAA', time: '1:09.69', seconds: 69.69 }, { standard: 'AAAA', time: '1:06.49', seconds: 66.49 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'F', ageGroup: '13-14', standards: [{ standard: 'B', time: '1:16.79', seconds: 76.79 }, { standard: 'BB', time: '1:11.29', seconds: 71.29 }, { standard: 'A', time: '1:05.89', seconds: 65.89 }, { standard: 'AA', time: '1:03.09', seconds: 63.09 }, { standard: 'AAA', time: '1:00.39', seconds: 60.39 }, { standard: 'AAAA', time: '57.59', seconds: 57.59 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'F', ageGroup: '13-14', standards: [{ standard: 'B', time: '2:51.79', seconds: 171.79 }, { standard: 'BB', time: '2:39.49', seconds: 159.49 }, { standard: 'A', time: '2:27.19', seconds: 147.19 }, { standard: 'AA', time: '2:21.09', seconds: 141.09 }, { standard: 'AAA', time: '2:14.99', seconds: 134.99 }, { standard: 'AAAA', time: '2:08.79', seconds: 128.79 }] },
+  { event: '400m IM',           course: 'SCY', gender: 'F', ageGroup: '13-14', standards: [{ standard: 'B', time: '6:05.79', seconds: 365.79 }, { standard: 'BB', time: '5:39.69', seconds: 339.69 }, { standard: 'A', time: '5:13.49', seconds: 313.49 }, { standard: 'AA', time: '5:00.49', seconds: 300.49 }, { standard: 'AAA', time: '4:47.39', seconds: 287.39 }, { standard: 'AAAA', time: '4:34.29', seconds: 274.29 }] },
+
+  // ─── 15-16 Boys SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'M', ageGroup: '15-16', standards: [{ standard: 'B', time: '28.29', seconds: 28.29 }, { standard: 'BB', time: '26.29', seconds: 26.29 }, { standard: 'A', time: '24.19', seconds: 24.19 }, { standard: 'AA', time: '23.19', seconds: 23.19 }, { standard: 'AAA', time: '22.19', seconds: 22.19 }, { standard: 'AAAA', time: '21.19', seconds: 21.19 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '15-16', standards: [{ standard: 'B', time: '1:01.99', seconds: 61.99 }, { standard: 'BB', time: '57.59', seconds: 57.59 }, { standard: 'A', time: '53.19', seconds: 53.19 }, { standard: 'AA', time: '50.99', seconds: 50.99 }, { standard: 'AAA', time: '48.79', seconds: 48.79 }, { standard: 'AAAA', time: '46.49', seconds: 46.49 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '15-16', standards: [{ standard: 'B', time: '2:15.99', seconds: 135.99 }, { standard: 'BB', time: '2:06.29', seconds: 126.29 }, { standard: 'A', time: '1:56.59', seconds: 116.59 }, { standard: 'AA', time: '1:51.79', seconds: 111.79 }, { standard: 'AAA', time: '1:46.89', seconds: 106.89 }, { standard: 'AAAA', time: '1:41.99', seconds: 101.99 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'M', ageGroup: '15-16', standards: [{ standard: 'B', time: '1:07.49', seconds: 67.49 }, { standard: 'BB', time: '1:02.69', seconds: 62.69 }, { standard: 'A', time: '57.89', seconds: 57.89 }, { standard: 'AA', time: '55.49', seconds: 55.49 }, { standard: 'AAA', time: '53.09', seconds: 53.09 }, { standard: 'AAAA', time: '50.69', seconds: 50.69 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'M', ageGroup: '15-16', standards: [{ standard: 'B', time: '1:16.89', seconds: 76.89 }, { standard: 'BB', time: '1:11.39', seconds: 71.39 }, { standard: 'A', time: '1:05.89', seconds: 65.89 }, { standard: 'AA', time: '1:03.19', seconds: 63.19 }, { standard: 'AAA', time: '1:00.39', seconds: 60.39 }, { standard: 'AAAA', time: '57.69', seconds: 57.69 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'M', ageGroup: '15-16', standards: [{ standard: 'B', time: '1:07.19', seconds: 67.19 }, { standard: 'BB', time: '1:02.39', seconds: 62.39 }, { standard: 'A', time: '57.59', seconds: 57.59 }, { standard: 'AA', time: '55.19', seconds: 55.19 }, { standard: 'AAA', time: '52.79', seconds: 52.79 }, { standard: 'AAAA', time: '50.39', seconds: 50.39 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'M', ageGroup: '15-16', standards: [{ standard: 'B', time: '2:30.89', seconds: 150.89 }, { standard: 'BB', time: '2:20.19', seconds: 140.19 }, { standard: 'A', time: '2:09.39', seconds: 129.39 }, { standard: 'AA', time: '2:03.99', seconds: 123.99 }, { standard: 'AAA', time: '1:58.59', seconds: 118.59 }, { standard: 'AAAA', time: '1:53.19', seconds: 113.19 }] },
+  { event: '400m IM',           course: 'SCY', gender: 'M', ageGroup: '15-16', standards: [{ standard: 'B', time: '5:22.19', seconds: 322.19 }, { standard: 'BB', time: '4:59.19', seconds: 299.19 }, { standard: 'A', time: '4:36.19', seconds: 276.19 }, { standard: 'AA', time: '4:24.69', seconds: 264.69 }, { standard: 'AAA', time: '4:13.19', seconds: 253.19 }, { standard: 'AAAA', time: '4:01.59', seconds: 241.59 }] },
+
+  // ─── 15-16 Girls SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'F', ageGroup: '15-16', standards: [{ standard: 'B', time: '31.79', seconds: 31.79 }, { standard: 'BB', time: '29.49', seconds: 29.49 }, { standard: 'A', time: '27.29', seconds: 27.29 }, { standard: 'AA', time: '26.09', seconds: 26.09 }, { standard: 'AAA', time: '24.99', seconds: 24.99 }, { standard: 'AAAA', time: '23.89', seconds: 23.89 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '15-16', standards: [{ standard: 'B', time: '1:08.79', seconds: 68.79 }, { standard: 'BB', time: '1:03.79', seconds: 63.79 }, { standard: 'A', time: '58.89', seconds: 58.89 }, { standard: 'AA', time: '56.49', seconds: 56.49 }, { standard: 'AAA', time: '53.99', seconds: 53.99 }, { standard: 'AAAA', time: '51.59', seconds: 51.59 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '15-16', standards: [{ standard: 'B', time: '2:28.99', seconds: 148.99 }, { standard: 'BB', time: '2:18.39', seconds: 138.39 }, { standard: 'A', time: '2:07.69', seconds: 127.69 }, { standard: 'AA', time: '2:02.39', seconds: 122.39 }, { standard: 'AAA', time: '1:57.09', seconds: 117.09 }, { standard: 'AAAA', time: '1:51.79', seconds: 111.79 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'F', ageGroup: '15-16', standards: [{ standard: 'B', time: '1:14.69', seconds: 74.69 }, { standard: 'BB', time: '1:09.39', seconds: 69.39 }, { standard: 'A', time: '1:04.09', seconds: 64.09 }, { standard: 'AA', time: '1:01.39', seconds: 61.39 }, { standard: 'AAA', time: '58.69', seconds: 58.69 }, { standard: 'AAAA', time: '56.09', seconds: 56.09 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'F', ageGroup: '15-16', standards: [{ standard: 'B', time: '1:25.89', seconds: 85.89 }, { standard: 'BB', time: '1:19.79', seconds: 79.79 }, { standard: 'A', time: '1:13.69', seconds: 73.69 }, { standard: 'AA', time: '1:10.59', seconds: 70.59 }, { standard: 'AAA', time: '1:07.49', seconds: 67.49 }, { standard: 'AAAA', time: '1:04.49', seconds: 64.49 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'F', ageGroup: '15-16', standards: [{ standard: 'B', time: '1:14.39', seconds: 74.39 }, { standard: 'BB', time: '1:09.09', seconds: 69.09 }, { standard: 'A', time: '1:03.79', seconds: 63.79 }, { standard: 'AA', time: '1:01.09', seconds: 61.09 }, { standard: 'AAA', time: '58.39', seconds: 58.39 }, { standard: 'AAAA', time: '55.79', seconds: 55.79 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'F', ageGroup: '15-16', standards: [{ standard: 'B', time: '2:46.19', seconds: 166.19 }, { standard: 'BB', time: '2:34.29', seconds: 154.29 }, { standard: 'A', time: '2:22.39', seconds: 142.39 }, { standard: 'AA', time: '2:16.49', seconds: 136.49 }, { standard: 'AAA', time: '2:10.59', seconds: 130.59 }, { standard: 'AAAA', time: '2:04.59', seconds: 124.59 }] },
+  { event: '400m IM',           course: 'SCY', gender: 'F', ageGroup: '15-16', standards: [{ standard: 'B', time: '5:54.99', seconds: 354.99 }, { standard: 'BB', time: '5:29.69', seconds: 329.69 }, { standard: 'A', time: '5:04.29', seconds: 304.29 }, { standard: 'AA', time: '4:51.59', seconds: 291.59 }, { standard: 'AAA', time: '4:38.99', seconds: 278.99 }, { standard: 'AAAA', time: '4:26.29', seconds: 266.29 }] },
+
+  // ─── 17-18 Boys SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'M', ageGroup: '17-18', standards: [{ standard: 'B', time: '27.59', seconds: 27.59 }, { standard: 'BB', time: '25.59', seconds: 25.59 }, { standard: 'A', time: '23.59', seconds: 23.59 }, { standard: 'AA', time: '22.59', seconds: 22.59 }, { standard: 'AAA', time: '21.69', seconds: 21.69 }, { standard: 'AAAA', time: '20.69', seconds: 20.69 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '17-18', standards: [{ standard: 'B', time: '1:00.29', seconds: 60.29 }, { standard: 'BB', time: '55.99', seconds: 55.99 }, { standard: 'A', time: '51.69', seconds: 51.69 }, { standard: 'AA', time: '49.59', seconds: 49.59 }, { standard: 'AAA', time: '47.39', seconds: 47.39 }, { standard: 'AAAA', time: '45.29', seconds: 45.29 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'M', ageGroup: '17-18', standards: [{ standard: 'B', time: '2:13.59', seconds: 133.59 }, { standard: 'BB', time: '2:03.99', seconds: 123.99 }, { standard: 'A', time: '1:54.49', seconds: 114.49 }, { standard: 'AA', time: '1:49.69', seconds: 109.69 }, { standard: 'AAA', time: '1:44.99', seconds: 104.99 }, { standard: 'AAAA', time: '1:40.19', seconds: 100.19 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'M', ageGroup: '17-18', standards: [{ standard: 'B', time: '1:05.19', seconds: 65.19 }, { standard: 'BB', time: '1:00.59', seconds: 60.59 }, { standard: 'A', time: '55.89', seconds: 55.89 }, { standard: 'AA', time: '53.59', seconds: 53.59 }, { standard: 'AAA', time: '51.29', seconds: 51.29 }, { standard: 'AAAA', time: '48.89', seconds: 48.89 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'M', ageGroup: '17-18', standards: [{ standard: 'B', time: '1:14.69', seconds: 74.69 }, { standard: 'BB', time: '1:09.39', seconds: 69.39 }, { standard: 'A', time: '1:03.99', seconds: 63.99 }, { standard: 'AA', time: '1:01.39', seconds: 61.39 }, { standard: 'AAA', time: '58.69', seconds: 58.69 }, { standard: 'AAAA', time: '55.99', seconds: 55.99 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'M', ageGroup: '17-18', standards: [{ standard: 'B', time: '1:05.39', seconds: 65.39 }, { standard: 'BB', time: '1:00.79', seconds: 60.79 }, { standard: 'A', time: '56.09', seconds: 56.09 }, { standard: 'AA', time: '53.69', seconds: 53.69 }, { standard: 'AAA', time: '51.39', seconds: 51.39 }, { standard: 'AAAA', time: '49.09', seconds: 49.09 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'M', ageGroup: '17-18', standards: [{ standard: 'B', time: '2:27.39', seconds: 147.39 }, { standard: 'BB', time: '2:16.89', seconds: 136.89 }, { standard: 'A', time: '2:06.39', seconds: 126.39 }, { standard: 'AA', time: '2:01.09', seconds: 121.09 }, { standard: 'AAA', time: '1:55.89', seconds: 115.89 }, { standard: 'AAAA', time: '1:50.59', seconds: 110.59 }] },
+  { event: '400m IM',           course: 'SCY', gender: 'M', ageGroup: '17-18', standards: [{ standard: 'B', time: '5:17.39', seconds: 317.39 }, { standard: 'BB', time: '4:54.69', seconds: 294.69 }, { standard: 'A', time: '4:31.99', seconds: 271.99 }, { standard: 'AA', time: '4:20.69', seconds: 260.69 }, { standard: 'AAA', time: '4:09.39', seconds: 249.39 }, { standard: 'AAAA', time: '3:57.99', seconds: 237.99 }] },
+
+  // ─── 17-18 Girls SCY ───
+  { event: '50m Freestyle',     course: 'SCY', gender: 'F', ageGroup: '17-18', standards: [{ standard: 'B', time: '31.39', seconds: 31.39 }, { standard: 'BB', time: '29.09', seconds: 29.09 }, { standard: 'A', time: '26.89', seconds: 26.89 }, { standard: 'AA', time: '25.79', seconds: 25.79 }, { standard: 'AAA', time: '24.69', seconds: 24.69 }, { standard: 'AAAA', time: '23.49', seconds: 23.49 }] },
+  { event: '100m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '17-18', standards: [{ standard: 'B', time: '1:08.09', seconds: 68.09 }, { standard: 'BB', time: '1:03.19', seconds: 63.19 }, { standard: 'A', time: '58.39', seconds: 58.39 }, { standard: 'AA', time: '55.89', seconds: 55.89 }, { standard: 'AAA', time: '53.49', seconds: 53.49 }, { standard: 'AAAA', time: '51.09', seconds: 51.09 }] },
+  { event: '200m Freestyle',    course: 'SCY', gender: 'F', ageGroup: '17-18', standards: [{ standard: 'B', time: '2:27.19', seconds: 147.19 }, { standard: 'BB', time: '2:16.69', seconds: 136.69 }, { standard: 'A', time: '2:06.19', seconds: 126.19 }, { standard: 'AA', time: '2:00.89', seconds: 120.89 }, { standard: 'AAA', time: '1:55.69', seconds: 115.69 }, { standard: 'AAAA', time: '1:50.39', seconds: 110.39 }] },
+  { event: '100m Backstroke',   course: 'SCY', gender: 'F', ageGroup: '17-18', standards: [{ standard: 'B', time: '1:13.39', seconds: 73.39 }, { standard: 'BB', time: '1:08.09', seconds: 68.09 }, { standard: 'A', time: '1:02.89', seconds: 62.89 }, { standard: 'AA', time: '1:00.29', seconds: 60.29 }, { standard: 'AAA', time: '57.69', seconds: 57.69 }, { standard: 'AAAA', time: '54.99', seconds: 54.99 }] },
+  { event: '100m Breaststroke', course: 'SCY', gender: 'F', ageGroup: '17-18', standards: [{ standard: 'B', time: '1:24.79', seconds: 84.79 }, { standard: 'BB', time: '1:18.79', seconds: 78.79 }, { standard: 'A', time: '1:12.69', seconds: 72.69 }, { standard: 'AA', time: '1:09.69', seconds: 69.69 }, { standard: 'AAA', time: '1:06.69', seconds: 66.69 }, { standard: 'AAAA', time: '1:03.59', seconds: 63.59 }] },
+  { event: '100m Butterfly',    course: 'SCY', gender: 'F', ageGroup: '17-18', standards: [{ standard: 'B', time: '1:13.59', seconds: 73.59 }, { standard: 'BB', time: '1:08.29', seconds: 68.29 }, { standard: 'A', time: '1:03.09', seconds: 63.09 }, { standard: 'AA', time: '1:00.39', seconds: 60.39 }, { standard: 'AAA', time: '57.79', seconds: 57.79 }, { standard: 'AAAA', time: '55.19', seconds: 55.19 }] },
+  { event: '200m IM',           course: 'SCY', gender: 'F', ageGroup: '17-18', standards: [{ standard: 'B', time: '2:43.59', seconds: 163.59 }, { standard: 'BB', time: '2:31.89', seconds: 151.89 }, { standard: 'A', time: '2:20.19', seconds: 140.19 }, { standard: 'AA', time: '2:14.39', seconds: 134.39 }, { standard: 'AAA', time: '2:08.49', seconds: 128.49 }, { standard: 'AAAA', time: '2:02.69', seconds: 122.69 }] },
+  { event: '400m IM',           course: 'SCY', gender: 'F', ageGroup: '17-18', standards: [{ standard: 'B', time: '5:50.69', seconds: 350.69 }, { standard: 'BB', time: '5:25.59', seconds: 325.59 }, { standard: 'A', time: '5:00.59', seconds: 300.59 }, { standard: 'AA', time: '4:47.99', seconds: 287.99 }, { standard: 'AAA', time: '4:35.49', seconds: 275.49 }, { standard: 'AAAA', time: '4:22.99', seconds: 262.99 }] },
 ]
