@@ -1,4 +1,27 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabase'
+
 export default function Navbar() {
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+  }
+
   return (
     <nav style={{
       background: '#0A1628',
@@ -16,15 +39,36 @@ export default function Navbar() {
         <a href="/workouts" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Workouts</a>
         <a href="/drills" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Drills</a>
         <a href="/times" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>My Times</a>
-        <a href="/login" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Sign in</a>
-        <a href="/signup" style={{
-          background: '#00B4A0',
-          color: '#fff',
-          padding: '7px 16px',
-          borderRadius: '8px',
-          fontSize: '0.9rem',
-          fontWeight: '500',
-        }}>Sign up</a>
+        {user ? (
+          <>
+            <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
+              {user.user_metadata?.name || user.email}
+            </span>
+            <button
+              onClick={handleSignOut}
+              style={{
+                background: 'transparent',
+                color: 'rgba(255,255,255,0.6)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '8px',
+                padding: '7px 16px',
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+              }}>Sign out</button>
+          </>
+        ) : (
+          <>
+            <a href="/login" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Sign in</a>
+            <a href="/signup" style={{
+              background: '#00B4A0',
+              color: '#fff',
+              padding: '7px 16px',
+              borderRadius: '8px',
+              fontSize: '0.9rem',
+              fontWeight: '500',
+            }}>Sign up</a>
+          </>
+        )}
       </div>
     </nav>
   )
