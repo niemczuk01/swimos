@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { getStandardAchieved, timeToSeconds, pvsStandards } from '../lib/pvs-standards'
+import { getStandardAchieved, timeToSeconds, pvsStandards } from '../lib/usa-standards'
 import {
   Chart as ChartJS,
   CategoryScale,
