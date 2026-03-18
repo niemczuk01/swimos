@@ -90,18 +90,6 @@ export default function SignupPage() {
         </div>
 
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', marginBottom: '6px' }}>I am a</label>
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            style={{ width: '100%', padding: '10px 14px', border: '1px solid #E2E8F0', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', background: '#fff' }}>
-            <option value="swimmer">Swimmer</option>
-            <option value="coach">Coach</option>
-            <option value="triathlete">Triathlete</option>
-          </select>
-        </div>
-
-        <div style={{ marginBottom: '16px' }}>
           <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', marginBottom: '6px' }}>Gender</label>
           <select
             value={gender}
