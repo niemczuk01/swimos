@@ -41,9 +41,9 @@ export default function Navbar() {
         <a href="/times" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>My Times</a>
         {user ? (
           <>
-            <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
+            <a href="/profile" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
               {user.user_metadata?.name || user.email}
-            </span>
+            </a>
             <button
               onClick={handleSignOut}
               style={{
