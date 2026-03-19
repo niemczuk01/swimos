@@ -28,7 +28,7 @@ export default function Home() {
           pointerEvents: 'none',
         }}/>
 
-        {/* Badge */}
+        {/* Top tagline badge */}
         <div style={{
           background: 'rgba(0,180,160,0.15)',
           border: '1px solid rgba(0,180,160,0.3)',
@@ -39,31 +39,31 @@ export default function Home() {
           fontWeight: '500',
           marginBottom: '28px',
           letterSpacing: '0.5px',
-        }}>Free for swimmers and coaches — always</div>
+        }}>Free for swimmers and coaches </div>
 
         {/* Main headline */}
         <h1 style={{
-          fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+          fontSize: 'clamp(2.2rem, 6vw, 4rem)',
           fontWeight: '800',
           color: '#fff',
-          lineHeight: '1.1',
+          lineHeight: '1.15',
           marginBottom: '20px',
           letterSpacing: '-1px',
           maxWidth: '800px',
         }}>
-          Train smarter.<br />
-          <span style={{ color: '#00B4A0' }}>Swim faster.</span>
+          Smarter training for<br />
+          <span style={{ color: '#00B4A0' }}>real performance gains.</span>
         </h1>
 
-        {/* Subheading */}
+        {/* Subheadline */}
         <p style={{
-          fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+          fontSize: 'clamp(0.95rem, 2vw, 1.15rem)',
           color: 'rgba(255,255,255,0.65)',
-          maxWidth: '540px',
-          lineHeight: '1.6',
+          maxWidth: '580px',
+          lineHeight: '1.7',
           marginBottom: '40px',
         }}>
-          We built the tools your coach wishes existed. Track your times, follow expert workouts, and master your technique — all in one place.
+          Track your times, follow structured workouts, and improve technique with tools designed for swimmers — all in one place.
         </p>
 
         {/* CTA buttons */}
@@ -76,8 +76,7 @@ export default function Home() {
             fontSize: '1rem',
             fontWeight: '600',
             textDecoration: 'none',
-            transition: 'opacity 0.2s',
-          }}>Get started free</a>
+          }}>Get Started — Free</a>
           <a href="/workouts" style={{
             background: 'rgba(255,255,255,0.08)',
             color: '#fff',
@@ -87,26 +86,30 @@ export default function Home() {
             fontWeight: '500',
             textDecoration: 'none',
             border: '1px solid rgba(255,255,255,0.15)',
-          }}>Browse workouts</a>
+          }}>View Workouts</a>
         </div>
 
-        {/* Stats row */}
+        {/* Bottom stats row */}
         <div style={{
           display: 'flex',
           gap: '48px',
           marginTop: '64px',
           flexWrap: 'wrap',
           justifyContent: 'center',
+          borderTop: '1px solid rgba(255,255,255,0.08)',
+          paddingTop: '40px',
+          width: '100%',
+          maxWidth: '700px',
         }}>
           {[
-            { value: '100+', label: 'Workouts' },
-            { value: 'All ages', label: 'USA Swimming standards' },
-            { value: '4 strokes', label: 'Drill library' },
-            { value: 'Free', label: 'Always' },
+            { value: '100+', label: 'Structured Workouts' },
+            { value: 'All Skill Levels', label: 'Beginner to Elite' },
+            { value: 'All Four Strokes', label: 'Drill Library' },
+            { value: 'Always Free', label: 'No paywalls, ever' },
           ].map((stat) => (
             <div key={stat.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#fff' }}>{stat.value}</div>
-              <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.45)', marginTop: '4px' }}>{stat.label}</div>
+              <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#fff' }}>{stat.value}</div>
+              <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>{stat.label}</div>
             </div>
           ))}
         </div>
@@ -115,7 +118,7 @@ export default function Home() {
       {/* Feature section */}
       <section style={{ background: '#F4F7FB', padding: '80px 20px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: '700', textAlign: 'center', marginBottom: '12px' }}>
             Everything you need in the water
           </h2>
           <p style={{ textAlign: 'center', color: '#6B7A99', marginBottom: '48px', fontSize: '1rem' }}>
@@ -134,7 +137,7 @@ export default function Home() {
               {
                 icon: '🏊',
                 title: 'Workout Library',
-                description: 'Coach-built workouts for every level — from beginner triathletes to competitive swimmers chasing cuts.',
+                description: 'Structured workouts for every level — from beginner swimmers to competitive athletes chasing cuts.',
                 color: '#EAF3FF',
                 link: '/workouts',
               },
@@ -162,70 +165,11 @@ export default function Home() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: '1.4rem', marginBottom: '16px',
                   }}>{feature.icon}</div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: '600', marginBottom: '10px' }}>{feature.title}</h3>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: '600', marginBottom: '10px', color: '#0A1628' }}>{feature.title}</h3>
                   <p style={{ fontSize: '0.9rem', color: '#6B7A99', lineHeight: '1.6' }}>{feature.description}</p>
                 </div>
               </a>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* For swimmers / for coaches split */}
-      <section style={{ background: '#fff', padding: '80px 20px' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #0A1628, #0C2A4A)',
-            borderRadius: '16px', padding: '36px', color: '#fff',
-          }}>
-            <div style={{ fontSize: '2rem', marginBottom: '16px' }}>🏊‍♂️</div>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '12px' }}>For swimmers</h3>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {[
-                'Track times and personal bests',
-                'See your USA Swimming standard',
-                'Follow coach-built workouts',
-                'Watch drill videos by stroke',
-                'Build a college recruiting profile',
-              ].map((item) => (
-                <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>
-                  <span style={{ color: '#00B4A0', fontWeight: '700' }}>✓</span> {item}
-                </li>
-              ))}
-            </ul>
-            <a href="/signup" style={{
-              display: 'inline-block', marginTop: '24px',
-              background: '#00B4A0', color: '#fff',
-              padding: '10px 24px', borderRadius: '8px',
-              fontSize: '0.9rem', fontWeight: '500', textDecoration: 'none',
-            }}>Join as a swimmer</a>
-          </div>
-
-          <div style={{
-            background: 'linear-gradient(135deg, #1a0533, #2D1065)',
-            borderRadius: '16px', padding: '36px', color: '#fff',
-          }}>
-            <div style={{ fontSize: '2rem', marginBottom: '16px' }}>📋</div>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '12px' }}>For coaches</h3>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {[
-                'Build and share workouts',
-                'Plan your season',
-                'Share drill progressions',
-                'Track athlete times',
-                'Access coaching methodology',
-              ].map((item) => (
-                <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>
-                  <span style={{ color: '#A78BFA', fontWeight: '700' }}>✓</span> {item}
-                </li>
-              ))}
-            </ul>
-            <a href="/signup" style={{
-              display: 'inline-block', marginTop: '24px',
-              background: '#7C3AED', color: '#fff',
-              padding: '10px 24px', borderRadius: '8px',
-              fontSize: '0.9rem', fontWeight: '500', textDecoration: 'none',
-            }}>Join as a coach</a>
           </div>
         </div>
       </section>
@@ -235,17 +179,17 @@ export default function Home() {
         background: 'linear-gradient(135deg, #0A1628 0%, #0C2A4A 100%)',
         padding: '80px 20px', textAlign: 'center',
       }}>
-        <h2 style={{ fontSize: '2rem', fontWeight: '700', color: '#fff', marginBottom: '16px' }}>
+        <h2 style={{ fontSize: '1.8rem', fontWeight: '700', color: '#fff', marginBottom: '16px' }}>
           Ready to swim smarter?
         </h2>
-        <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '32px', fontSize: '1rem' }}>
-          Join swimmers and coaches already using SwimOS. Free, forever.
+        <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '32px', fontSize: '1rem', maxWidth: '480px', margin: '0 auto 32px' }}>
+          Join swimmers already using SwimOS to track their progress and improve their technique.
         </p>
         <a href="/signup" style={{
           background: '#00B4A0', color: '#fff',
           padding: '14px 36px', borderRadius: '10px',
           fontSize: '1rem', fontWeight: '600', textDecoration: 'none',
-        }}>Get started free</a>
+        }}>Get Started — Free</a>
       </section>
     </main>
   )
