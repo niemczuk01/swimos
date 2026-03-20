@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
 import { getStandardAchieved } from '../lib/usa-standards'
@@ -27,6 +27,9 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [activeTab, setActiveTab] = useState<'profile' | 'settings'>('profile')
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+  const [avatarUploading, setAvatarUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
   // Editable fields
@@ -62,6 +65,7 @@ export default function ProfilePage() {
       setAgeGroup(data.age_group || '11-12')
       setState(data.state || '')
       setHighSchool(data.high_school || '')
+      if (data.avatar_url) setAvatarUrl(data.avatar_url)
     }
     setLoading(false)
   }
@@ -73,6 +77,54 @@ export default function ProfilePage() {
       .eq('user_id', userId)
       .order('date', { ascending: false })
     if (data) setTimes(data)
+  }
+
+  async function handleAvatarUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file || !user) return
+
+    // Validate file type and size
+    if (!file.type.startsWith('image/')) {
+      setMessage('Please upload an image file.')
+      return
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setMessage('Image must be under 2MB.')
+      return
+    }
+
+    setAvatarUploading(true)
+    const filePath = `${user.id}/avatar.${file.name.split('.').pop()}`
+
+    // Upload to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file, { upsert: true })
+
+    if (uploadError) {
+      setMessage('Error uploading image.')
+      setAvatarUploading(false)
+      return
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(filePath)
+
+    // Save URL to profile
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({ avatar_url: publicUrl })
+      .eq('id', user.id)
+
+    if (updateError) {
+      setMessage('Error saving avatar.')
+    } else {
+      setAvatarUrl(publicUrl)
+      setMessage('Profile picture updated!')
+    }
+    setAvatarUploading(false)
   }
 
   async function handleSave() {
@@ -95,7 +147,6 @@ export default function ProfilePage() {
     setSaving(false)
   }
 
-  // Get personal best for each event
   function getPersonalBest(eventName: string, course: string) {
     const eventTimes = times.filter(t => t.event === eventName && t.course === course)
     if (eventTimes.length === 0) return null
@@ -110,10 +161,7 @@ export default function ProfilePage() {
     })
   }
 
-  // Get all events the swimmer has times for
-  const swumEvents = events.filter(e =>
-    times.some(t => t.event === e)
-  )
+  const swumEvents = events.filter(e => times.some(t => t.event === e))
 
   if (loading) return <p style={{ padding: '40px', color: '#6B7A99' }}>Loading...</p>
 
@@ -122,14 +170,48 @@ export default function ProfilePage() {
 
       {/* Profile header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
-        <div style={{
-          width: '80px', height: '80px', borderRadius: '50%',
-          background: 'linear-gradient(135deg, #00B4A0, #0A1628)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '1.8rem', fontWeight: '700', color: '#fff', flexShrink: 0,
-        }}>
-          {name ? name.charAt(0).toUpperCase() : '?'}
+
+        {/* Avatar */}
+        <div style={{ position: 'relative', flexShrink: 0 }}>
+          <div style={{
+            width: '80px', height: '80px', borderRadius: '50%',
+            background: 'linear-gradient(135deg, #00B4A0, #0A1628)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '1.8rem', fontWeight: '700', color: '#fff',
+            overflow: 'hidden',
+          }}>
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              name ? name.charAt(0).toUpperCase() : '?'
+            )}
+          </div>
+
+          {/* Camera icon overlay — clicking opens file picker */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={avatarUploading}
+            title="Change profile picture"
+            style={{
+              position: 'absolute', bottom: 0, right: 0,
+              width: '26px', height: '26px', borderRadius: '50%',
+              background: '#00B4A0', border: '2px solid #fff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', fontSize: '0.7rem',
+            }}
+          >
+            {avatarUploading ? '⏳' : '📷'}
+          </button>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarUpload}
+            style={{ display: 'none' }}
+          />
         </div>
+
         <div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '700', marginBottom: '4px' }}>{name || 'Your Profile'}</h1>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -142,7 +224,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '4px', marginBottom: '24px', borderBottom: '1px solid #E2E8F0', paddingBottom: '0' }}>
+      <div style={{ display: 'flex', gap: '4px', marginBottom: '24px', borderBottom: '1px solid #E2E8F0' }}>
         {(['profile', 'settings'] as const).map((tab) => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={{
             background: 'transparent', border: 'none',
@@ -162,7 +244,7 @@ export default function ProfilePage() {
         }}>{message}</div>
       )}
 
-      {/* Profile tab — recruiting view */}
+      {/* Profile tab */}
       {activeTab === 'profile' && (
         <>
           {bio && (
@@ -171,15 +253,12 @@ export default function ProfilePage() {
               <p style={{ fontSize: '0.95rem', color: '#0A1628', lineHeight: '1.6' }}>{bio}</p>
             </div>
           )}
-
           {highSchool && (
             <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}>
               <h2 style={{ fontSize: '0.85rem', fontWeight: '600', color: '#6B7A99', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>School</h2>
               <p style={{ fontSize: '0.95rem', color: '#0A1628' }}>{highSchool}</p>
             </div>
           )}
-
-          {/* Personal bests */}
           <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '0.85rem', fontWeight: '600', color: '#6B7A99', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '16px' }}>Personal Bests</h2>
             {swumEvents.length === 0 ? (
@@ -226,6 +305,38 @@ export default function ProfilePage() {
       {/* Settings tab */}
       {activeTab === 'settings' && (
         <>
+          {/* Avatar upload section */}
+          <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '16px' }}>Profile picture</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{
+                width: '64px', height: '64px', borderRadius: '50%',
+                background: 'linear-gradient(135deg, #00B4A0, #0A1628)',
+                overflow: 'hidden', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', fontSize: '1.5rem', fontWeight: '700', color: '#fff',
+              }}>
+                {avatarUrl
+                  ? <img src={avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : name?.charAt(0).toUpperCase() || '?'
+                }
+              </div>
+              <div>
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={avatarUploading}
+                  style={{
+                    background: '#00B4A0', color: '#fff', border: 'none',
+                    borderRadius: '8px', padding: '8px 16px', fontSize: '0.85rem',
+                    fontWeight: '500', cursor: 'pointer', marginRight: '8px',
+                  }}
+                >
+                  {avatarUploading ? 'Uploading...' : 'Upload photo'}
+                </button>
+                <span style={{ fontSize: '0.8rem', color: '#6B7A99' }}>JPG, PNG or GIF · Max 2MB</span>
+              </div>
+            </div>
+          </div>
+
           <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '16px' }}>Personal info</h2>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
