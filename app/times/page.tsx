@@ -62,7 +62,7 @@ export default function TimesPage() {
 
   async function fetchProfile(userId: string) {
     const { data } = await supabase
-      .from('profiles')
+      .from('profile')
       .select('gender, age_group')
       .eq('id', userId)
       .single()

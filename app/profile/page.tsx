@@ -32,7 +32,6 @@ export default function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
-  // Editable fields
   const [name, setName] = useState('')
   const [club, setClub] = useState('')
   const [bio, setBio] = useState('')
@@ -53,7 +52,7 @@ export default function ProfilePage() {
   }, [])
 
   async function fetchProfile(userId: string) {
-    const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
+    const { data } = await supabase.from('profile').select('*').eq('id', userId).single()
     if (data) {
       setProfile(data)
       setName(data.name || '')
@@ -83,20 +82,19 @@ export default function ProfilePage() {
     const file = e.target.files?.[0]
     if (!file || !user) return
 
-    // Validate file type and size
     if (!file.type.startsWith('image/')) {
       setMessage('Please upload an image file.')
       return
     }
-    if (file.size > 2 * 1024 * 1024) {
-      setMessage('Image must be under 2MB.')
+
+    if (file.size > 5 * 1024 * 1024) {
+      setMessage('Image must be under 5MB.')
       return
     }
 
     setAvatarUploading(true)
     const filePath = `${user.id}/avatar.${file.name.split('.').pop()}`
 
-    // Upload to Supabase Storage
     const { error: uploadError } = await supabase.storage
       .from('avatars')
       .upload(filePath, file, { upsert: true })
@@ -107,21 +105,22 @@ export default function ProfilePage() {
       return
     }
 
-    // Get public URL
     const { data: { publicUrl } } = supabase.storage
       .from('avatars')
       .getPublicUrl(filePath)
 
-    // Save URL to profile
+    // Cache-busting timestamp so browser always loads the new image
+    const urlWithCacheBust = `${publicUrl}?t=${Date.now()}`
+
     const { error: updateError } = await supabase
-      .from('profiles')
-      .update({ avatar_url: publicUrl })
+      .from('profile')
+      .update({ avatar_url: urlWithCacheBust })
       .eq('id', user.id)
 
     if (updateError) {
       setMessage('Error saving avatar.')
     } else {
-      setAvatarUrl(publicUrl)
+      setAvatarUrl(urlWithCacheBust)
       setMessage('Profile picture updated!')
     }
     setAvatarUploading(false)
@@ -129,7 +128,7 @@ export default function ProfilePage() {
 
   async function handleSave() {
     setSaving(true)
-    const { error } = await supabase.from('profiles').update({
+    const { error } = await supabase.from('profile').update({
       name, club, bio,
       graduation_year: graduationYear ? parseInt(graduationYear) : null,
       primary_events: primaryEvents,
@@ -170,8 +169,6 @@ export default function ProfilePage() {
 
       {/* Profile header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
-
-        {/* Avatar */}
         <div style={{ position: 'relative', flexShrink: 0 }}>
           <div style={{
             width: '80px', height: '80px', borderRadius: '50%',
@@ -186,8 +183,6 @@ export default function ProfilePage() {
               name ? name.charAt(0).toUpperCase() : '?'
             )}
           </div>
-
-          {/* Camera icon overlay — clicking opens file picker */}
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={avatarUploading}
@@ -202,7 +197,6 @@ export default function ProfilePage() {
           >
             {avatarUploading ? '⏳' : '📷'}
           </button>
-
           <input
             ref={fileInputRef}
             type="file"
@@ -305,7 +299,6 @@ export default function ProfilePage() {
       {/* Settings tab */}
       {activeTab === 'settings' && (
         <>
-          {/* Avatar upload section */}
           <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '24px', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '16px' }}>Profile picture</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -332,7 +325,7 @@ export default function ProfilePage() {
                 >
                   {avatarUploading ? 'Uploading...' : 'Upload photo'}
                 </button>
-                <span style={{ fontSize: '0.8rem', color: '#6B7A99' }}>JPG, PNG or GIF · Max 2MB</span>
+                <span style={{ fontSize: '0.8rem', color: '#6B7A99' }}>JPG, PNG or GIF · Max 5MB</span>
               </div>
             </div>
           </div>

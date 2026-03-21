@@ -32,7 +32,7 @@ export default function SignupPage() {
 
     // Save profile to profiles table
     if (data.user) {
-      await supabase.from('profiles').insert({
+      await supabase.from('profile').insert({
         id: data.user.id,
         name,
         gender,
