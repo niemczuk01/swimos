@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
+const ADMIN_USER_ID = '2a8559dc-e3c8-4ca4-8a78-c43420be5e58'
+
 export default function Navbar() {
   const [user, setUser] = useState<any>(null)
 
@@ -41,6 +43,11 @@ export default function Navbar() {
         <a href="/times" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>My Times</a>
         {user ? (
           <>
+            {user.id === ADMIN_USER_ID && (
+              <a href="/admin" style={{ color: '#00B4A0', fontSize: '0.9rem', fontWeight: '600' }}>
+                Admin
+              </a>
+            )}
             <a href="/profile" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
               {user.user_metadata?.name || user.email}
             </a>
