@@ -34,7 +34,7 @@ export default function LoginPage() {
         padding: '32px',
       }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '8px' }}>Welcome back</h1>
-        <p style={{ color: '#6B7A99', fontSize: '0.9rem', marginBottom: '28px' }}>Sign in to your SwimOS account</p>
+        <p style={{ color: '#6B7A99', fontSize: '0.9rem', marginBottom: '28px' }}>Sign in to your Natare account</p>
 
         {message && (
           <div style={{

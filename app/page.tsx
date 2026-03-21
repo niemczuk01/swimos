@@ -183,7 +183,7 @@ export default function Home() {
           Ready to swim smarter?
         </h2>
         <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '32px', fontSize: '1rem', maxWidth: '480px', margin: '0 auto 32px' }}>
-          Join swimmers already using SwimOS to track their progress and improve their technique.
+          Join swimmers already using Natare to track their progress and improve their technique.
         </p>
         <a href="/signup" style={{
           background: '#00B4A0', color: '#fff',

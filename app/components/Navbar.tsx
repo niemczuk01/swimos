@@ -34,7 +34,7 @@ export default function Navbar() {
       justifyContent: 'space-between',
     }}>
       <div style={{ fontSize: '1.3rem', fontWeight: '700', color: '#fff' }}>
-        Swim<span style={{ color: '#00B4A0' }}>OS</span>
+        Nata<span style={{ color: '#00B4A0' }}>re</span>
       </div>
       <div style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
         <a href="/" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Home</a>

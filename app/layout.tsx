@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from './components/Navbar'
 
-export const metadata: Metadata = {
-  title: 'SwimOS',
-  description: 'The free platform for swimmers and coaches',
+export const metadata = {
+  title: 'Natare',
+  description: 'A free, community-driven platform for swimmers.',
 }
 
 export default function RootLayout({

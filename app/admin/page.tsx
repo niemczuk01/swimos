@@ -24,7 +24,7 @@ export default function AdminPage() {
   const [warmUp, setWarmUp] = useState('')
   const [mainSet, setMainSet] = useState('')
   const [warmDown, setWarmDown] = useState('')
-  const [source, setSource] = useState('SwimOS Coaching Staff')
+  const [source, setSource] = useState('Natare Coaching Staff')
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -71,7 +71,7 @@ export default function AdminPage() {
       setWarmUp('')
       setMainSet('')
       setWarmDown('')
-      setSource('SwimOS Coaching Staff')
+      setSource('Natare Coaching Staff')
       setLevel('Intermediate')
       setFocus('Freestyle')
     }
@@ -151,7 +151,7 @@ export default function AdminPage() {
             <div>
               <label style={labelStyle}>Source</label>
               <input type="text" value={source} onChange={(e) => setSource(e.target.value)}
-                placeholder="e.g. SwimOS Coaching Staff" style={inputStyle} />
+                placeholder="e.g. Natare Coaching Staff" style={inputStyle} />
             </div>
           </div>
         </div>

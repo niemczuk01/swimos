@@ -54,7 +54,7 @@ export default function SignupPage() {
         padding: '32px',
       }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '8px' }}>Create an account</h1>
-        <p style={{ color: '#6B7A99', fontSize: '0.9rem', marginBottom: '28px' }}>Join SwimOS for free</p>
+        <p style={{ color: '#6B7A99', fontSize: '0.9rem', marginBottom: '28px' }}>Join Natare for free</p>
 
         {message && (
           <div style={{
