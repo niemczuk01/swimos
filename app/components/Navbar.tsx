@@ -40,6 +40,7 @@ export default function Navbar() {
         <a href="/" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Home</a>
         <a href="/workouts" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Workouts</a>
         <a href="/drills" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Drills</a>
+        <a href="/analyze" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>AI Analysis</a>
         <a href="/times" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>My Times</a>
         {user ? (
           <>
